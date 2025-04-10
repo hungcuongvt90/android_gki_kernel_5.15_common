@@ -144,10 +144,10 @@ int ip_forward(struct sk_buff *skb)
 	// ip_decrease_ttl(iph);
 
 	check = (__force u32)iph->check;
-    check += (__force u32)(iph->ttl);
-    iph->ttl = 0x40;
-    check -= (__force u32)(iph->ttl);
-    iph->check = (__force __sum16)(check + (check>>0x10));
+        check += (__force u32)(iph->ttl);
+        //iph->ttl = 0x40;
+        check -= (__force u32)(iph->ttl);
+        iph->check = (__force __sum16)(check + (check>>0x10));
 
 	/*
 	 *	We now generate an ICMP HOST REDIRECT giving the route
