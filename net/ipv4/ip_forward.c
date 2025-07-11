@@ -86,6 +86,7 @@ static int ip_forward_finish(struct net *net, struct sock *sk, struct sk_buff *s
 int ip_forward(struct sk_buff *skb)
 {
 	u32 mtu;
+	u32 check;
 	struct iphdr *iph;	/* Our header */
 	struct rtable *rt;	/* Route we use */
 	struct ip_options *opt	= &(IPCB(skb)->opt);
@@ -141,7 +142,10 @@ int ip_forward(struct sk_buff *skb)
 	iph = ip_hdr(skb);
 
 	/* Decrease ttl after skb cow done */
-	ip_decrease_ttl(iph);
+	// ip_decrease_ttl(iph);
+
+	check = (__force u32)iph->check;
+    iph->check = (__force __sum16)(check + (check>>0x10));
 
 	/*
 	 *	We now generate an ICMP HOST REDIRECT giving the route
